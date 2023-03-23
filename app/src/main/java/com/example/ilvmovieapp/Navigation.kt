@@ -1,2 +1,24 @@
 package com.example.ilvmovieapp
 
+import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.ilvmovieproject.screens.DetailScreen
+import com.example.ilvmovieproject.screens.HomeScreen
+
+@Composable
+fun Navigation(){
+    val navController = rememberNavController()
+    
+    NavHost(navController = navController, startDestination = Screens.Home.route){
+        composable("HomeScreen") { HomeScreen(navController = navController)}
+        composable("DetailScreen/{movieID}", arguments = listOf(navArgument("movieId") {})
+        ) {
+            backStageEntry ->
+            backStageEntry.arguments?.getString("movieId")
+                ?.let { DetailScreen(navController = navController, movieId = it) }
+        }
+    }
+}

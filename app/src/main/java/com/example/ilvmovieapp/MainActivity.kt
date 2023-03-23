@@ -20,19 +20,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.ilvmovieapp.Navigation
 import com.example.ilvmovieapp.ui.theme.ILVMovieAppTheme
 import com.example.ilvmovieproject.models.Movie
 import com.example.ilvmovieproject.models.getMovies
+import com.example.ilvmovieproject.screens.DetailScreen
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
@@ -47,9 +46,12 @@ class MainActivity : ComponentActivity() {
                     //color = MaterialTheme.colors.primary
                     //color = MaterialTheme.colors.background
                 ) {
-                    Column() {
+                    Column {
+                        /*
                         TopAppBar()
                         MovieList()
+                        */
+                        Navigation()
                     }
                 }
             }
@@ -64,13 +66,15 @@ fun DefaultPreview() {
     ILVMovieAppTheme {
         Column(modifier = Modifier
             .background(color = Color(0xFF8BBFE9))) {
-            TopAppBar()
-            MovieList()
+            //TopAppBar()
+            //MovieList()
+            Navigation()
         }
     }
 }
 
 
+/*
 @Composable
 fun TopAppBar(){
     Row(modifier = Modifier
@@ -139,6 +143,7 @@ fun MovieRow(movies: Movie) {
     var visible by remember {
         mutableStateOf(false)
     }
+    
 
     Card(
         modifier = Modifier
@@ -162,7 +167,10 @@ fun MovieRow(movies: Movie) {
                     mutableStateOf(Random.nextInt(movies.images.size - 1))
                 }
 
-                AsyncImage(model = movies.images[randomPicture], contentDescription = movies.title)
+                AsyncImage(model = movies.images[randomPicture], contentDescription = movies.title, modifier = Modifier
+                    .clickable { 
+                        DetailScreen()
+                    })
                 Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "", modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(4.dp))
@@ -172,10 +180,10 @@ fun MovieRow(movies: Movie) {
                 Modifier
                     .fillMaxWidth()
                     .clickable {
-                        if (!visible){
+                        if (!visible) {
                             visible = true
                             icon = Icons.Default.KeyboardArrowDown
-                        }else{
+                        } else {
                             visible = false
                             icon = Icons.Default.KeyboardArrowUp
                         }
@@ -235,9 +243,9 @@ fun MovieRow(movies: Movie) {
         }
     }
 }
+*/
 
-
-
+/*
 @Composable
 fun MovieList(movies: List<Movie> = getMovies()) {
     LazyColumn() {
@@ -246,3 +254,4 @@ fun MovieList(movies: List<Movie> = getMovies()) {
         }
     }
 }
+*/
