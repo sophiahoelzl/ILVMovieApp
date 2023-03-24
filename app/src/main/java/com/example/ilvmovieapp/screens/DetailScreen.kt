@@ -212,10 +212,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -253,24 +250,20 @@ fun DetailScreen(navController: NavController, movieID: String) {
     Card(modifier = Modifier
         .fillMaxWidth()) {
 
-        Column {
+        Column (modifier = Modifier) {
             TopAppBar(navController,mo)
             Spacer(modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Color(0xFFABC3D6))
                 .size(15.dp))
             MovieRow(movies = mo)
-        }
 
-        Column() {
             LazyRow(){
-/*
-                mo.images.forEach{ img ->
-                    Column(modifier = Modifier
-                        .background(color = Color.Red)) {
-                    }
-                }*/
+                items(mo.images) { item ->
+                    AsyncImage(model = item, contentDescription = mo.title)
+                }
             }
+
         }
     }
 }
@@ -301,9 +294,13 @@ fun TopAppBar(navController: NavController, movie: Movie){
 }
 
 @Composable
-fun showImages(movie: Movie){
+fun showImages(mo: Movie){
 
-    AsyncImage(model = movie.images, contentDescription = movie.title, modifier = Modifier)
+    LazyRow(){
+        items(mo.images) { item ->
+            AsyncImage(model = item, contentDescription = "")
+        }
+    }
 
 }
 
