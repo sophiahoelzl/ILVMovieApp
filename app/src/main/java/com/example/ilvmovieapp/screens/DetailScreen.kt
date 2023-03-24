@@ -206,7 +206,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -219,6 +218,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -258,12 +258,18 @@ fun DetailScreen(navController: NavController, movieID: String) {
                 .size(15.dp))
             MovieRow(movies = mo)
 
-            LazyRow(){
+            Text(text = "MOVIE IMAGES", fontSize = 20.sp, textAlign = TextAlign.Center, modifier = Modifier
+                .fillMaxWidth()
+                .size(40.dp))
+
+            LazyRow {
                 items(mo.images) { item ->
-                    AsyncImage(model = item, contentDescription = mo.title)
+                    Box(modifier = Modifier
+                        .padding(8.dp)){
+                        AsyncImage(model = item, contentDescription = mo.title)
+                    }
                 }
             }
-
         }
     }
 }
@@ -291,17 +297,6 @@ fun TopAppBar(navController: NavController, movie: Movie){
             Text(text = movie.title, fontSize = 21.sp, fontWeight = FontWeight.Bold, color = Color.White)
         }
     }
-}
-
-@Composable
-fun showImages(mo: Movie){
-
-    LazyRow(){
-        items(mo.images) { item ->
-            AsyncImage(model = item, contentDescription = "")
-        }
-    }
-
 }
 
 @Composable
