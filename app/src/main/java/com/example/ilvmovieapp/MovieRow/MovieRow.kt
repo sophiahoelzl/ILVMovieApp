@@ -1,107 +1,31 @@
-package com.example.ilvmovieproject.screens
+package com.example.ilvmovieapp
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.ilvmovieapp.screens.Screens
 import com.example.ilvmovieproject.models.Movie
-import com.example.ilvmovieproject.models.getMovies
 import kotlin.random.Random
 
-@Composable
-fun HomeScreen(navController: NavController ){
-
-    Column() {
-        TopAppBar(navController)
-        MovieList(movies = getMovies(),navController)
-    }
-}
-
-
 
 @Composable
-fun TopAppBar(navController: NavController){
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .height(60.dp)
-        .background(color = Color(0xFF0D5088))) {
-        Column(modifier = Modifier
-            //.background(color = Color.Red)
-            .size(100.dp), verticalArrangement = Arrangement.Center){
-            Text(text = "  MOVIES", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.White)
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        Column (modifier = Modifier
-            .size(50.dp, 60.dp)
-            //.background(color = Color.Green)
-            , verticalArrangement = Arrangement.Center){
-            DropDown(navController)
-        }
-    }
-}
-
-@Composable
-fun DropDown(navController: NavController){
-    val items = arrayOf("Favorites")
-    val disableItem = 1
-    val contextForToast = LocalContext.current.applicationContext
-
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-
-    Box(contentAlignment = Alignment.CenterStart){
-        IconButton(onClick = {
-            expanded = true
-        }) {
-            Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Menu", modifier = Modifier
-                .size(32.dp))
-        }
-
-        DropdownMenu(modifier = Modifier
-            .background(color = Color(0xFFFFFFFF)), expanded = expanded, onDismissRequest = { expanded = false }) {
-            items.forEachIndexed { itemIndex, itemValue ->
-                DropdownMenuItem(
-                    onClick = {
-                        Toast.makeText(contextForToast, itemValue, Toast.LENGTH_SHORT)
-                            .show()
-                        expanded = false
-                    },
-                    enabled = (itemIndex != disableItem)
-                ) {
-                    Text(text = itemValue, modifier = Modifier
-                        .clickable {
-                            navController.navigate(Screens.Favorite.route)
-                        })
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-fun MovieRow(movies: Movie, navController: NavController) {
+fun MovieRow(movies: Movie) {
 
     var icon by remember {
         mutableStateOf(Icons.Default.KeyboardArrowUp)
@@ -112,19 +36,16 @@ fun MovieRow(movies: Movie, navController: NavController) {
     }
 
 
-    Card(
-        modifier = Modifier
+    Card(modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
     ) {
-        Column(
-            Modifier
+        Column(Modifier
                 .padding(4.dp)
                 .fillMaxWidth(), verticalArrangement = Arrangement.Center
 
         ) {
-            Box(
-                Modifier
+            Box(Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp)), Alignment.Center
 
@@ -134,17 +55,13 @@ fun MovieRow(movies: Movie, navController: NavController) {
                     mutableStateOf(Random.nextInt(movies.images.size - 1))
                 }
 
-                AsyncImage(model = movies.images[randomPicture], contentDescription = movies.title, modifier = Modifier
-                    .clickable {
-                        navController.navigate(Screens.Detail.passID(movies.id))
-                    })
+                AsyncImage(model = movies.images[randomPicture], contentDescription = movies.title)
                 Icon(imageVector = Icons.Default.Favorite, contentDescription = "", tint = Color.White, modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(6.dp)
                     .size(30.dp))
             }
-            Row(
-                Modifier
+            Row(Modifier
                     .fillMaxWidth()
                     .clickable {
                         if (!visible) {
@@ -211,12 +128,3 @@ fun MovieRow(movies: Movie, navController: NavController) {
     }
 }
 
-
-@Composable
-fun MovieList(movies: List<Movie>, navController: NavController) {
-    LazyColumn() {
-        items(movies) { movie ->
-           MovieRow(movies = movie, navController = navController)
-        }
-    }
-}

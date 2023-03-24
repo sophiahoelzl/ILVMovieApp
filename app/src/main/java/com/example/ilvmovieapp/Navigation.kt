@@ -6,6 +6,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.ilvmovieapp.screens.Favorites
+import com.example.ilvmovieapp.screens.Screens
 import com.example.ilvmovieproject.screens.DetailScreen
 import com.example.ilvmovieproject.screens.HomeScreen
 
@@ -14,6 +16,7 @@ fun Navigation(navController: NavHostController){
     
     NavHost(navController = navController, startDestination = Screens.Home.route){
         composable(Screens.Home.route) { HomeScreen(navController = navController)}
+        composable(Screens.Favorite.route){ Favorites(navController = navController)}
         composable(Screens.Detail.route, arguments = listOf(navArgument("movieID"){
             type = NavType.StringType
         })) {
