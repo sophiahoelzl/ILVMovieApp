@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.ilvmovieapp.Screens
 import com.example.ilvmovieproject.models.Movie
 import com.example.ilvmovieproject.models.getMovies
 import kotlin.random.Random
@@ -33,7 +34,7 @@ fun DetailScreen(navController: NavController, movieId: String) {
 
     findMovie(movie = movieId)
 
-    TopAppBar(result)
+    TopAppBar(result, navController)
 
     Card(modifier = Modifier
         .fillMaxWidth()) {
@@ -66,7 +67,7 @@ fun findMovie(movie: String) {
 
 
 @Composable
-fun TopAppBar(movie: Movie){
+fun TopAppBar(movie: Movie, navController: NavController){
     Row(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -76,7 +77,9 @@ fun TopAppBar(movie: Movie){
             //.background(color = Color.Green)
             , verticalArrangement = Arrangement.Center){
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back", modifier = Modifier
-                .clickable {  })
+                .clickable {
+                    navController.navigate(Screens.Home.route)
+                })
         }
         Column(modifier = Modifier
             //.background(color = Color.Red)

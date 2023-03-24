@@ -137,7 +137,7 @@ fun MovieRow(movies: Movie, navController: NavController) {
 
                 AsyncImage(model = movies.images[randomPicture], contentDescription = movies.title, modifier = Modifier
                     .clickable {
-                        navController.navigate(Screens.Detail.route)
+                        navController.navigate(Screens.Detail.route +  movies.id)
                     })
                 Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "", modifier = Modifier
                     .align(Alignment.TopEnd)

@@ -26,6 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.ilvmovieapp.Navigation
 import com.example.ilvmovieapp.ui.theme.ILVMovieAppTheme
@@ -37,6 +40,9 @@ import kotlin.random.Random
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        var navController: NavHostController
+
         setContent {
             ILVMovieAppTheme {
                 // A surface container using the 'background' color from the theme
@@ -51,7 +57,9 @@ class MainActivity : ComponentActivity() {
                         TopAppBar()
                         MovieList()
                         */
-                        Navigation()
+
+                        navController = rememberNavController()
+                        Navigation(navController)
                     }
                 }
             }
@@ -68,7 +76,7 @@ fun DefaultPreview() {
             .background(color = Color(0xFF8BBFE9))) {
             //TopAppBar()
             //MovieList()
-            Navigation()
+            //Navigation(n)
         }
     }
 }
