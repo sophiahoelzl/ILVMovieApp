@@ -52,7 +52,7 @@ fun TopAppBar(){
         Column(modifier = Modifier
             //.background(color = Color.Red)
             .size(100.dp), verticalArrangement = Arrangement.Center){
-            Text(text = "  MOVIES", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            Text(text = "  MOVIES", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.White)
         }
         Spacer(modifier = Modifier.weight(1f))
         Column (modifier = Modifier
@@ -78,7 +78,8 @@ fun DropDown(){
         IconButton(onClick = {
             expanded = true
         }) {
-            Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Menu")
+            Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Menu", modifier = Modifier
+                .size(32.dp))
         }
 
         DropdownMenu(modifier = Modifier
@@ -137,7 +138,10 @@ fun MovieRow(movies: Movie, navController: NavController) {
 
                 AsyncImage(model = movies.images[randomPicture], contentDescription = movies.title, modifier = Modifier
                     .clickable {
-                        navController.navigate(Screens.Detail.route +  movies.id)
+                        navController.navigate(Screens.Detail.passID(movies.id))
+
+                        var M = movies
+
                     })
                 Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "", modifier = Modifier
                     .align(Alignment.TopEnd)
