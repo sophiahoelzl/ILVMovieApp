@@ -20,19 +20,15 @@ import com.example.ilvmovieproject.models.getMovies
 fun findMovie(movieID: String): Movie{
 
     val movies: List<Movie> = getMovies()
+    val result: List<Movie> = movies.filter { it.id == movieID }
 
-    movies.forEach { m ->
-        if (movieID == m.id){
-            return m
-        }
-    }
-    return movies[1]
+    return result[0]
 }
 
 @Composable
 fun DetailScreen(navController: NavController, movieID: String) {
 
-    var mo: Movie = findMovie(movieID)
+    val mo: Movie = findMovie(movieID)
 
 
     Card(modifier = Modifier
