@@ -3,8 +3,7 @@ package com.example.ilvmovieproject.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -13,30 +12,21 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.ilvmovieapp.MovieRow
+import com.example.ilvmovieapp.ViewModel.MovieViewModel
 import com.example.ilvmovieproject.models.Movie
 import com.example.ilvmovieproject.models.getMovies
 
 @Composable
-fun findMovie(movieID: String): Movie{
+fun DetailScreen(navController: NavController, movieID: String, viewModel: MovieViewModel) {
 
-    val movies: List<Movie> = getMovies()
-    val result: List<Movie> = movies.filter { it.id == movieID }
-
-    return result[0]
-}
-
-@Composable
-fun DetailScreen(navController: NavController, movieID: String) {
-
-    val mo: Movie = findMovie(movieID)
-
+    val mo = viewModel.getMovie(movieID)
 
     Card(modifier = Modifier
         .fillMaxWidth()) {
 
-        Column (modifier = Modifier) {
+        Column () {
             com.example.ilvmovieapp.TopAppBar(navController = navController, title = mo.title)
-            MovieRow(movies = mo)
+            MovieRow(movies = mo, onHeartClicked = {movieId -> viewModel.onHeartClicked(movieId)})
 
             Text(text = "MOVIE IMAGES", fontSize = 20.sp, textAlign = TextAlign.Center, modifier = Modifier
                 .fillMaxWidth()

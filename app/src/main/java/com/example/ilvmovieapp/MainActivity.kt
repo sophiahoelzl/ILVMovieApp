@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
@@ -31,6 +32,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.ilvmovieapp.Navigation
+import com.example.ilvmovieapp.ViewModel.MovieViewModel
 import com.example.ilvmovieapp.ui.theme.ILVMovieAppTheme
 import com.example.ilvmovieproject.models.Movie
 import com.example.ilvmovieproject.models.getMovies
@@ -41,7 +43,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var navController: NavHostController
+        val viewModel: MovieViewModel by viewModels()
 
         setContent {
             ILVMovieAppTheme {
@@ -51,8 +53,7 @@ class MainActivity : ComponentActivity() {
                     color = Color(0xFFABC3D6)
                 ) {
                     Column {
-                        navController = rememberNavController()
-                        Navigation(navController)
+                        Navigation(viewModel)
                     }
                 }
             }

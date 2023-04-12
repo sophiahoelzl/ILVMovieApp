@@ -11,26 +11,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.ilvmovieapp.MovieRow
+import com.example.ilvmovieapp.ViewModel.MovieViewModel
 import com.example.ilvmovieproject.models.Movie
 import com.example.ilvmovieproject.models.getMovies
 
 
 @Composable
-fun Favorites(navController: NavController){
+fun Favorites(navController: NavController, viewModel: MovieViewModel){
 
     Card(modifier = Modifier
         .fillMaxWidth()) {
-
-        var movie: List<Movie> = getMovies()
-        var fornow: List<Movie> = listOf(movie[1], movie[3], movie[5], movie[7])
 
         Column(modifier = Modifier.background(color = Color(0xFFABC3D6))) {
 
             com.example.ilvmovieapp.TopAppBar(navController = navController, title = "FAVORITES")
 
             LazyColumn {
-                items(fornow) { movie ->
-                    com.example.ilvmovieproject.screens.MovieRow(movies = movie, navController = navController)
+                items(viewModel.favoriteMovies) { movie ->
+                    MovieRow(
+                        movies = movie,
+                        onHeartClicked = {movie -> viewModel.onHeartClicked(movie)},
+                        onItemClicked = {movie -> navController.navigate(route = Screens.Detail.passID(movie))})
                 }
             }
         }

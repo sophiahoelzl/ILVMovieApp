@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
@@ -18,14 +19,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.ilvmovieproject.models.Movie
 import kotlin.random.Random
 
 
 @Composable
-fun MovieRow(movies: Movie) {
+fun MovieRow(
+    movies: Movie,
+    onItemClicked:(String) -> Unit = {},
+    onHeartClicked:(Movie) -> Unit = {}){
 
     var icon by remember {
         mutableStateOf(Icons.Default.KeyboardArrowUp)
@@ -36,32 +39,38 @@ fun MovieRow(movies: Movie) {
     }
 
 
-    Card(modifier = Modifier
+    Card(
+        modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp)
+            .clickable {
+                onItemClicked(movies.id)
+            }
     ) {
-        Column(Modifier
+        Column(
+            Modifier
                 .padding(4.dp)
                 .fillMaxWidth(), verticalArrangement = Arrangement.Center
 
         ) {
-            Box(Modifier
+            Box(
+                Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(10.dp)), Alignment.Center
+                    .clip(RoundedCornerShape(10.dp))
 
             ) {
 
+                /*
                 var randomPicture by remember {
                     mutableStateOf(Random.nextInt(movies.images.size - 1))
-                }
+                }*/
 
-                AsyncImage(model = movies.images[randomPicture], contentDescription = movies.title)
-                Icon(imageVector = Icons.Default.Favorite, contentDescription = "", tint = Color.White, modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(6.dp)
-                    .size(30.dp))
+                AsyncImage(model = movies.images[0], contentDescription = movies.title, modifier = Modifier)
+                FavIcon(movies, onFavClicked = onHeartClicked, liked = movies.isFavorite)
+
             }
-            Row(Modifier
+            Row(
+                Modifier
                     .fillMaxWidth()
                     .clickable {
                         if (!visible) {
@@ -96,7 +105,7 @@ fun MovieRow(movies: Movie) {
                         .fillMaxWidth()) {
                         Row(){
                             Text(text = "Genre: ", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                            Text(text = movies.genre, fontSize = 16.sp)
+                            Text(text = movies.genre.toString().replace("[","").replace("]", ""), fontSize = 16.sp)
                         }
                         Row() {
                             Text(text = "Released: ", fontSize = 16.sp, fontWeight = FontWeight.Bold)
@@ -113,7 +122,7 @@ fun MovieRow(movies: Movie) {
 
                         Row() {
                             Text(text = "Rating: ", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                            Text(text = movies.rating, fontSize = 16.sp)
+                            Text(text = movies.rating.toString(), fontSize = 16.sp)
                         }
                         Divider(color = Color.Gray, thickness = 1.dp, modifier = Modifier
                             .padding(10.dp))
@@ -124,6 +133,31 @@ fun MovieRow(movies: Movie) {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun FavIcon(movie: Movie, liked: Boolean, onFavClicked:(Movie) -> Unit){
+
+    Box(modifier = Modifier
+        .width(2000.dp)
+        .padding(10.dp),
+        contentAlignment = Alignment.TopEnd){
+        IconButton(
+            modifier = Modifier
+                .padding(0.dp)
+                .size(40.dp),
+            onClick = {
+                onFavClicked(movie) },
+        ) {
+            Icon(
+                tint = Color.White,
+                imageVector =
+                if (liked) Icons.Default.Favorite
+                else Icons.Default.FavoriteBorder,
+                contentDescription = "Add to favorites",
+            )
         }
     }
 }
