@@ -65,7 +65,6 @@ fun MovieRow(
                 if (movies.images.isNotEmpty()){
                     AsyncImage(model = movies.images[0], contentDescription = movies.title, modifier = Modifier)
                 }
-
                 FavIcon(movies, onFavClicked = onHeartClicked, liked = movies.isFavorite)
 
             }
@@ -142,26 +141,24 @@ fun FavIcon(movie: Movie, liked: Boolean, onFavClicked:(Movie) -> Unit){
 
     Box(modifier = Modifier
         .width(400.dp)
-        .height(50.dp)) {
-        Column(modifier = Modifier
-            .align(Alignment.CenterEnd)) {
+        .height(50.dp),
+        contentAlignment = Alignment.CenterEnd)
+    {
+        IconButton(modifier = Modifier
+            .size(70.dp),
+            onClick = {
+                onFavClicked(movie)
+            },
+        ) {
 
-            IconButton(modifier = Modifier
-                    .size(70.dp),
-                onClick = {
-                    onFavClicked(movie)
-                },
-            ) {
-
-                Icon(modifier = Modifier
-                    .size(30.dp),
-                    tint = Color.Red,
-                    imageVector =
-                    if (liked) Icons.Default.Favorite
-                    else Icons.Default.FavoriteBorder,
-                    contentDescription = "Add to favorites",
-                )
-            }
+            Icon(modifier = Modifier
+                .size(30.dp),
+                tint = Color.Red,
+                imageVector =
+                if (liked) Icons.Default.Favorite
+                else Icons.Default.FavoriteBorder,
+                contentDescription = "Add to favorites",
+            )
         }
     }
 }

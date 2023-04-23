@@ -24,13 +24,13 @@ import com.example.ilvmovieapp.ui.theme.ILVMovieAppTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        try {
+        /*try {
             val field = CursorWindow::class.java.getDeclaredField("sCursorWindowSize")
             field.isAccessible = true
             field[null] = 100 * 1024 * 1024 //the 100MB is the new size
         } catch (e: Exception) {
             e.printStackTrace()
-        }
+        }*/
 
         setContent {
             ILVMovieAppTheme {

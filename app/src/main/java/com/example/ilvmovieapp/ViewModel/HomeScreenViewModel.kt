@@ -17,9 +17,7 @@ class HomeScreenViewModel(private val movieRepository: MovieRepository): ViewMod
 
     init {
         viewModelScope.launch {
-
             movieRepository.getAllMovies().collect { movieList ->
-                _movieList.value = movieList
                 if (movieList.isNotEmpty()) {
                     _movieList.value = movieList
                 }
