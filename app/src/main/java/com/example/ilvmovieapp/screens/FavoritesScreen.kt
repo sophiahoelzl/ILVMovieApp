@@ -11,13 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import com.example.ilvmovieapp.MovieRow
-import com.example.ilvmovieapp.ViewModel.MovieViewModel
-import com.example.ilvmovieproject.models.Movie
-import com.example.ilvmovieproject.models.getMovies
+import com.example.ilvmovieapp.ViewModel.FavoriteScreenViewModel
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun Favorites(navController: NavController, viewModel: MovieViewModel){
+fun Favorites(navController: NavController, favViewModel: FavoriteScreenViewModel){
+
+    val favoriteMoviesState by favViewModel.favoriteMoviesState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     Card(modifier = Modifier
         .fillMaxWidth()) {
@@ -27,10 +29,13 @@ fun Favorites(navController: NavController, viewModel: MovieViewModel){
             com.example.ilvmovieapp.TopAppBar(navController = navController, title = "FAVORITES")
 
             LazyColumn {
-                items(viewModel.favoriteMovies) { movie ->
+                items(favoriteMoviesState) { movie ->
                     MovieRow(
                         movies = movie,
-                        onHeartClicked = {movie -> viewModel.onHeartClicked(movie)},
+                        onHeartClicked = {movie ->
+                            coroutineScope.launch {
+                                favViewModel.updateFavoriteMovies(movie)
+                            }},
                         onItemClicked = {movie -> navController.navigate(route = Screens.Detail.passID(movie))})
                 }
             }

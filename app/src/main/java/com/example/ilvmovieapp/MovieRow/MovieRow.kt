@@ -2,26 +2,26 @@ package com.example.ilvmovieapp
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.ilvmovieproject.R
 import com.example.ilvmovieproject.models.Movie
-import kotlin.random.Random
 
 
 @Composable
@@ -55,17 +55,17 @@ fun MovieRow(
         ) {
             Box(
                 Modifier
+                    .height(200.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp))
 
             ) {
 
-                /*
-                var randomPicture by remember {
-                    mutableStateOf(Random.nextInt(movies.images.size - 1))
-                }*/
 
-                AsyncImage(model = movies.images[0], contentDescription = movies.title, modifier = Modifier)
+                if (movies.images.isNotEmpty()){
+                    AsyncImage(model = movies.images[0], contentDescription = movies.title, modifier = Modifier)
+                }
+
                 FavIcon(movies, onFavClicked = onHeartClicked, liked = movies.isFavorite)
 
             }
@@ -141,23 +141,27 @@ fun MovieRow(
 fun FavIcon(movie: Movie, liked: Boolean, onFavClicked:(Movie) -> Unit){
 
     Box(modifier = Modifier
-        .width(2000.dp)
-        .padding(10.dp),
-        contentAlignment = Alignment.TopEnd){
-        IconButton(
-            modifier = Modifier
-                .padding(0.dp)
-                .size(40.dp),
-            onClick = {
-                onFavClicked(movie) },
-        ) {
-            Icon(
-                tint = Color.White,
-                imageVector =
-                if (liked) Icons.Default.Favorite
-                else Icons.Default.FavoriteBorder,
-                contentDescription = "Add to favorites",
-            )
+        .width(400.dp)
+        .height(50.dp)) {
+        Column(modifier = Modifier
+            .align(Alignment.CenterEnd)) {
+
+            IconButton(modifier = Modifier
+                    .size(70.dp),
+                onClick = {
+                    onFavClicked(movie)
+                },
+            ) {
+
+                Icon(modifier = Modifier
+                    .size(30.dp),
+                    tint = Color.Red,
+                    imageVector =
+                    if (liked) Icons.Default.Favorite
+                    else Icons.Default.FavoriteBorder,
+                    contentDescription = "Add to favorites",
+                )
+            }
         }
     }
 }

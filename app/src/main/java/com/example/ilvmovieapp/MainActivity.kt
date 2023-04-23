@@ -1,59 +1,55 @@
 package com.example.ilvmovieproject
 
+import android.database.CursorWindow
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ilvmovieapp.Navigation
-import com.example.ilvmovieapp.ViewModel.MovieViewModel
+import com.example.ilvmovieapp.ViewModel.*
+import com.example.ilvmovieapp.data.MovieDatabase
+import com.example.ilvmovieapp.repository.MovieRepository
 import com.example.ilvmovieapp.ui.theme.ILVMovieAppTheme
-import com.example.ilvmovieproject.models.Movie
-import com.example.ilvmovieproject.models.getMovies
-import com.example.ilvmovieproject.screens.DetailScreen
-import kotlin.random.Random
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val viewModel: MovieViewModel by viewModels()
+        try {
+            val field = CursorWindow::class.java.getDeclaredField("sCursorWindowSize")
+            field.isAccessible = true
+            field[null] = 100 * 1024 * 1024 //the 100MB is the new size
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         setContent {
             ILVMovieAppTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier
                     .fillMaxSize(),
                     color = Color(0xFFABC3D6)
                 ) {
+
                     Column {
-                        Navigation(viewModel)
+                        val db = MovieDatabase.getDatabase(LocalContext.current)
+                        val repository = MovieRepository(movieDao = db.movieDao())
+                        val factoryHome = MovieViewModelFactory(repository = repository)
+                        val factoryFav = FavoriteScreenViewModelFactory(repository = repository)
+                        val factoryAdd = AddScreenViewModelFactory(repository = repository)
+                        val HomeScreenViewModel: HomeScreenViewModel = viewModel(factory = factoryHome)
+                        val FavoriteScreenViewModel: FavoriteScreenViewModel = viewModel(factory = factoryFav)
+                        val AddMovieScreenViewModel: AddScreenViewModel = viewModel(factory = factoryAdd)
+
+                        Navigation(HomeScreenViewModel,FavoriteScreenViewModel,AddMovieScreenViewModel)
                     }
                 }
             }
